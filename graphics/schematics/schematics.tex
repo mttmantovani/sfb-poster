@@ -1,0 +1,172 @@
+% !TeX program = xelatex
+\documentclass[tikz]{standalone}
+%\usepackage{newtxtext,newtxmath}
+\usepackage{mathspec}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\setmainfont{Arial}
+\setmathsfont(Digits,Latin,Greek,Special){Arial}
+\usepackage[italic]{mathastext}
+
+\begin{document}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{shapes.geometric,calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes,snakes}
+\usetikzlibrary{decorations.markings}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzset{
+lead/.style={thin,color=black,fill=black!10},
+dot/.style={thick,color=black},
+capacity/.style={color=black},
+arrow/.style={thin,<->,>=stealth},
+arrowLeft/.style={thin,<-,>=stealth},
+spinArrow/.style={-{Latex[length=3pt,width=4pt]},shorten <=1.5pt,shorten >=1.5pt,very thick},
+nodecircle/.style={draw, shape=circle,inner sep=1.2pt},
+oscbasisA/.style={fill=red!20, inner sep=0pt,draw=black},
+oscbasisB/.style={fill=red!20, inner sep=0pt,draw=black},
+nodesquare/.style={draw, shape=square,inner sep=1.4pt, fill=white},
+nodecontrol/.style={red,draw}
+nodecontrol/.style={}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\drawScheme}{\begin{tikzpicture}[scale=1, inner sep=1pt]
+%	local definitions
+	\coordinate (origin) at (0,0);
+	\def\leadWidth{1.4};
+	\def\leadHeight{2.8};
+	
+	\def\OscHeight{0.6};
+	\def\OscWidth{0.9};
+	\def\OscThickness{0.2};
+	
+	\def\SCOffsetInPt{2.8} 
+	\def\SCDiameter{0.7};
+	\def\SCTipHeight{1.6};
+	
+	\def\dotHeightA{1.6};
+	\def\dotHeightB{1.6};
+	\def\dotdWidth{1.2};
+	
+	\def\interDotSpacing{1.0};
+	\def\LeadDotSpacing{0.6};
+	
+
+%	define basic structure
+	\coordinate (gridNode11) at (origin);
+	\coordinate (gridNode12) at ($(gridNode11)+(\leadWidth*0.5+\LeadDotSpacing,0)$);
+	\coordinate (gridNode13) at ($(gridNode12)+(\leadWidth+\interDotSpacing,0)$);
+	\coordinate (gridNode14) at ($(gridNode13)+(\leadWidth*0.5+\LeadDotSpacing,0)$);
+	\coordinate (gridNode1mid) at ($(gridNode12)!0.5!(gridNode13)$);
+	\coordinate (gridNodeSCTip) at ($ (gridNode1mid)+(0,\SCTipHeight cm)$);
+	\coordinate (gridNode0mid) at ($ (gridNode1mid)+(0,\leadHeight cm)+(0,\SCOffsetInPt pt)$);
+	\coordinate (gridNode02) at ($ (gridNode0mid)-(\SCDiameter cm,0)$);
+	\coordinate (gridNode03) at ($ (gridNode0mid)+(\SCDiameter cm,0)$);
+	\coordinate (cOscA) at ($ (gridNode12)+(0,\OscHeight cm)$);
+	\coordinate (cOscB) at ($ (gridNode13)+(0,\OscHeight cm)$);
+
+% draw structure	
+	\node[nodecontrol] at (gridNode11){};
+	\node[nodecontrol] at (gridNode12){};
+	\node[nodecontrol] at (gridNode13){};
+	\node[nodecontrol] at (gridNode14){};
+	\node[nodecontrol] at (gridNode1mid){};
+	\node[nodecontrol] at (gridNode0mid){};
+	\node[nodecontrol] at (gridNode02){};
+	\node[nodecontrol] at (gridNode03){};
+	
+	\node[nodecontrol] at (gridNodeSCTip){};
+	\node[nodecontrol] at (cOscA){};
+	\node[nodecontrol] at (cOscB){};
+
+%	define heatBath	
+	\node[oscbasisA,minimum width=\OscWidth cm,minimum height=\OscThickness 
+	cm](nOscA) at (cOscA){}; %Tright_L
+	\draw [decorate,decoration={
+			snake,amplitude=1.7ex,segment length=0.5ex,post length=0.1ex
+		}] (gridNode12)-- node[right,xshift=2ex]{$\omega_L$}(nOscA); 
+	\node[oscbasisB,minimum width=\OscWidth cm,minimum height=\OscThickness 
+	cm](nOscB) at (cOscB){};
+	\draw [decorate,decoration={
+			snake,amplitude=1.7ex,segment length=0.5ex,post length=0.1ex
+		}] (gridNode13)-- node[left,xshift=-2ex]{$\omega_R$}(nOscB);  %\omega_R
+	
+%	define DQD_AB
+	\node[inner sep=0, anchor=south east] (leadA) at (gridNode11){%
+		\begin{tikzpicture}[xscale=\leadWidth,yscale=1.0]
+			\draw[domain=-1.0:1.0,smooth,variable=\x, lead] plot ({1-1/(exp(\x*7.2+2.5)+1)},\x) 
+			{ -- ++(0,-2)}
+			;
+		\end{tikzpicture}%
+	};
+	\node[nodecontrol,yshift=\dotHeightA cm] (leadRateA) at (leadA.south east){};
+	
+	\node[nodecontrol,inner xsep=0,yshift=\dotHeightA cm] (dotA) at (gridNode12){
+		\begin{tikzpicture}
+			\draw[dot] (0,0) -- (\dotdWidth,0);
+		\end{tikzpicture}
+	};
+	\node[nodecontrol,inner xsep=0,yshift=\dotHeightB cm] (dotB) at (gridNode13){
+		\begin{tikzpicture}
+			\draw[dot] (0,0) -- (\dotdWidth,0);
+		\end{tikzpicture}
+	};
+	\node[inner sep=0, anchor=south west] (leadB) at (gridNode14){%
+		\begin{tikzpicture}[xscale=\leadWidth,yscale=1.0]
+			\draw[domain=-1.0:1.0,smooth,variable=\x, lead] plot ({1/(exp(\x*7.2+2.5)+1)},\x) -- ++(0,\leadHeight-2) -- ++(0,-\leadHeight);
+		\end{tikzpicture}%
+	};
+	\node[nodecontrol,yshift=\dotHeightB cm] (leadRateB) at (leadB.south west){};
+
+
+%	draw connections
+	\path [arrow] 
+		(leadRateA.north east) edge [bend left=45, distance=0.3cm] 
+		node[yshift=1.4ex] {$\Gamma$}  (dotA.north west) %$\Gamma_L$
+		(dotB.north east) edge [bend left=45, distance=0.3cm] 
+		node[yshift=1.4ex] {$\Gamma$} (leadRateB.north west) %$\Gamma_R$
+	;	
+	
+	
+	\node at (dotA) 
+	[nodecontrol,above,yshift=0.2ex,xshift=0ex]{$\varepsilon$}; %
+	\node at (dotB) 
+	[nodecontrol,above,yshift=0.2ex,xshift=0ex]{$\varepsilon$}; %
+	\node at ([xshift=-0.5*\leadWidth cm,yshift=1.5ex]gridNode11) {$L$};
+	\node at ([xshift=0.5*\leadWidth cm,yshift=1.5ex]gridNode14) {$R$};
+	
+ 	\draw[dashed] ([yshift=4.5ex]gridNode14)--++(\leadWidth,0);
+ 	\draw[dashed] ([yshift=4.5ex]gridNode11)--++(-\leadWidth,0);
+	\draw[thick] ([yshift=0.09ex,xshift=0.09ex]gridNode14)--++(0,\leadHeight+0.1);
+	\draw[thick] ([yshift=0.09ex,xshift=-0.09ex]gridNode11)--++(0,\leadHeight+0.1);
+
+	
+	\draw[arrow, densely dotted, shorten >=1.5pt] (dotA.south) -- node[right]{$\lambda_L$} (nOscA.north);
+	\draw[arrow, densely dotted, shorten >=1.5pt] (dotB.south) -- node[left]{$\lambda_R$} (nOscB.north);
+	
+% 	draw CPS	
+	\draw[thick,fill=yellow!90!red!10] (gridNode02) --(gridNodeSCTip) --(gridNode03) ;
+	\node at ([xshift=0ex,yshift=-1ex]gridNode0mid) {$S$};
+	\node[nodecontrol](contactS) at ($(gridNodeSCTip)!0.7!(gridNode0mid)$) {};
+	\node[nodecontrol](leadS) at ([yshift=0.3ex]contactS) {};
+	
+	
+	\node[draw,semithick,yshift=-1ex,inner sep=0pt,ellipse,font={\small},
+		minimum width=3.5ex,minimum height=2.4ex](nCooper) at (contactS.center){};
+	\draw[spinArrow] ([xshift=-2pt]nCooper.south)--([xshift=-2pt]nCooper.north);
+	\draw[spinArrow] ([xshift=2pt]nCooper.north)--([xshift=2pt]nCooper.south);
+	\path [arrowLeft,shorten <=1pt, shorten >=0.6pt] 
+		([xshift=3ex]dotA.south) edge [bend left=-60, distance=0.35cm] node[below,xshift=1.1ex, yshift=0.4ex] {$ $} ([yshift=-6.2ex,xshift=0.08ex]leadS.south)
+		([xshift=-3ex]dotB.south) edge [bend left=60, distance=0.35cm] node[below,xshift=1.1ex, yshift=0.4ex] {$ $} ([yshift=-6.2ex,xshift=-0.08ex]leadS.south)
+	;
+	\node[yshift=-9.0ex,xshift=0.5ex] at (leadS.south) {$\Gamma_{S}$};
+	
+	
+	
+\end{tikzpicture}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\drawScheme%
+\end{document}
+

@@ -1,0 +1,210 @@
+% !TeX program = xelatex
+\documentclass[tikz]{standalone}
+\usepackage{mathspec}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\setmainfont{Arial}
+\setmathsfont(Digits,Latin,Greek,Special){Arial}
+\usepackage[italic]{mathastext}
+
+% Laengenberechnung
+\usepackage{calc}
+
+% Fuer If-Then-Else
+\usepackage{ifthen}
+
+% Fur Makros mit Key-Value-Pairs
+\usepackage{keycommand}
+
+\newlength{\blskip}%
+
+\newkeycommand{\selectfontsize}[baselineskip=0, baselinefaktor=12/10][1]{%
+\ifthenelse{\equal{\commandkey{baselineskip}}{0}}{%
+\setlength{\blskip}{#1 * \commandkey{baselinefaktor}}%
+\fontsize{#1}{\blskip}\selectfont}%
+{\setlength{\blskip}{\commandkey{baselineskip}}%
+\fontsize{#1}{\blskip}\selectfont}}%
+
+
+
+
+
+
+\begin{document}
+%\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{shapes.geometric,calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes,snakes}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{positioning}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+% Size of figure in inches
+
+
+
+
+\begin{tikzpicture}[scale=10, inner sep=0pt]
+
+% Define global parameters
+\def\totalwidth{3.375}
+\def\totalheight{3.5}
+\def\widthA{3.375}
+\def\widthB{1.6875}
+\def\widthC{1.6875}
+\def\widthD{1.6875}
+\def\heightA{0.85}
+\def\heightB{0.87}
+\def\heightC{1.13}
+\def\heightD{2}
+\def\sepx{0.1}
+\def\sepy{0.1}
+
+
+\tikzset{
+	dot/.style={ultra thick,color=black},
+	occdot/.style={draw,shape=circle,size=1,fill=orange}
+	emptydot/.style={draw=orange,shape=circle,minimum size=0.1,dashed}
+	capacity/.style={color=black},
+	arrow/.style={<->,>=stealth},
+	arrowLeft/.style={<->,>=stealth},
+	nodecircle/.style={draw, shape=circle,inner sep=1.2pt},
+	oscbasisA/.style={fill=red!20, inner sep=0pt,draw=black},
+	oscbasisB/.style={fill=red!20, inner sep=0pt,draw=black},
+	nodesquare/.style={draw, shape=rectangle,inner sep=0pt, fill=white},
+%	nodecontrol/.style={draw,red,inner sep=0pt},
+	nodecontrol/.style={},
+	letter/.style={label={south east:#1}},
+	transition/.style 2 args={rectangle,draw,fill=red!20,minimum
+	width=#1,minimum
+	height=#2}
+}
+
+\tikzstyle{every path}=[line width=3pt]
+
+\tikzset{user/.style={circle, inner sep=0pt, fill=orange, draw=none}}
+
+\tikzset{declare function={%
+				rhoone(\a,\c,\t)=sqrt(\a^2*cos(2*\t)-sqrt(-2*\a^4 + 64*\c^2 + 2*\a^4*cos(4*\t))/2)/2;
+				rhotwo(\a,\c,\t)=sqrt(\a^2*cos(2*\t)+sqrt(-2*\a^4 +
+				\c^2+2*\a^4*cos(4*\t))/2)/2;
+				},
+		singlet/.style args={with centers #1 and #2 and constant #3}{%
+			insert path={
+					let \p1=($(#2)-(#1)$),\n1={veclen(\x1,\y1)/1cm},\n2={atan2(\x1,\y1)}
+					in %\pgfextra{\typeout{#1,#2,#3,\n1,\n2}}
+					[shift={($(#2)!0.5!(#1)$)}]
+					plot[variable=\t,domain=0:360,smooth,samples=101]
+					(\t-\n2+90:{rhotwo(\n1,#3/7.3,\t)})
+					}
+		}
+}
+
+
+%\fontsize{24}{10.8}\selectfont
+\selectfontsize{24pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	\begin{scope}[inner
+%	sep=0,shift={($(\widthA*0.25,-\heightA-\heightB*0.5)$)}]
+%	\useasboundingbox[] ($(-\widthB*0.5,-\heightB*0.5)$) rectangle %
+%		($(\widthB*0.5,\heightB*0.5)$);
+%	\draw[red]($(-\widthB*0.5,-\heightB*0.5)$) rectangle
+%	($(\widthB*0.5,\heightB*0.5)$);
+%	\coordinate (ul) at ($(-\widthB*0.5,\heightB*0.5)$);
+%	\node[nodecontrol] at (0,0)  (originB) {};
+%	\node[letter=(b)] (letterB) at (ul)   {};
+%	\node[nodecontrol] at (letterB) {};
+
+
+	% Local parameters
+	\def\dotWidth{0.3}
+	\def\dotXSep{0.15}
+	\def\dotYSep{0.25}
+	\def\dotSize{0.05}
+	% Local coordinates
+	\coordinate (dotLm) at
+	($(-\dotXSep*0.5-\dotWidth*0.5,0)$) ;
+	\coordinate (dotRm) at
+	($(\dotXSep*0.5+\dotWidth*0.5,0)$) ;
+	\coordinate (dotLu) at
+	($(-\dotXSep*0.5-\dotWidth*0.5,\dotYSep)$) ;
+	\coordinate (dotRu) at
+	($(\dotXSep*0.5+\dotWidth*0.5,\dotYSep)$) ;
+	\coordinate (dotLb) at
+	($(-\dotXSep*0.5-\dotWidth*0.5,-\dotYSep)$) ;
+	\coordinate (dotRb) at
+	($(\dotXSep*0.5+\dotWidth*0.5,-\dotYSep)$) ;
+
+	% Draw structure nodes
+%	\node[nodecontrol] at (dotLm) {};
+%	\node[nodecontrol] at (dotRm) {};
+%	\node[nodecontrol] at (dotLu) {};
+%	\node[nodecontrol] at (dotRu) {};
+%	\node[nodecontrol] at (dotLb) {};
+%	\node[nodecontrol] at (dotRb) {};
+
+	\draw[draw=none,fill opacity=1,fill=yellow,singlet=with centers dotLu and
+	dotRu and constant pi];
+	% Draw dots
+	\draw[dot] ($(dotLm) - (\dotWidth*0.5,0)$) -- ($(dotLm) +
+	(\dotWidth*0.5,0)$);
+	\draw[dot] ($(dotRm) - (\dotWidth*0.5,0)$) -- ($(dotRm) +
+	(\dotWidth*0.5,0)$);
+	\draw[dot] ($(dotLu) - (\dotWidth*0.5,0)$) -- ($(dotLu) +
+	(\dotWidth*0.5,0)$);
+	\draw[dot] ($(dotRu) - (\dotWidth*0.5,0)$) -- ($(dotRu) +
+	(\dotWidth*0.5,0)$);
+	\draw[dot] ($(dotLb) - (\dotWidth*0.5,0)$) -- ($(dotLb) +
+	(\dotWidth*0.5,0)$);
+	\draw[dot] ($(dotRb) - (\dotWidth*0.5,0)$) -- ($(dotRb) +
+	(\dotWidth*0.5,0)$);
+
+	\filldraw[orange] (dotLu) circle (\dotSize);
+	\filldraw[orange] (dotRu) circle (\dotSize);
+
+	\filldraw[orange] (dotLm) circle (\dotSize);
+	\draw[orange,dash pattern=on 4 off 2,fill=white,inner sep=0]
+	(dotRm) circle (\dotSize);
+
+	\draw[orange,dash pattern=on 4 off 2,fill=white,inner sep=0]
+	(dotLb) circle (\dotSize);
+	\draw[orange,dash pattern=on 4 off 2,fill=white,inner sep=0]
+	(dotRb) circle (\dotSize);
+
+	% \draw ($(0,\dotYSep)$) pic {infinity symbol={height=3em, line width=0.1pt, double=orange,
+	% draw=orange}};
+
+
+	\node[label={[xshift=-2em]left:$|S\rangle$}] at (dotLu) {};
+	\node[label={[xshift=-2em]left:$|\alpha\sigma\rangle$}] at (dotLm) {};
+	\node[label={[xshift=-2em]left:$|0\rangle$}] at (dotLb) {};
+	
+	\node[label={[xshift=-5em]left:singlet:}] at (dotLu) {};
+	\node[label={[xshift=-5em]left:singly-occupied:}] at (dotLm) {};
+	\node[label={[xshift=-5em]left:empty:}] at (dotLb) {};
+
+ 	\path [arrow, dash pattern=on 4 off 2, orange,auto]
+ 		($(dotRu)+(\dotWidth*0.6,0)$) edge [bend left]
+		 node[xshift=0.5ex,black] {$\Gamma_S$} ($(dotRb)+(\dotWidth*0.6,0)$)  ;
+
+	 \path [->,>=stealth,shorten >=1pt,shorten <=1pt,ultra thick,blue!80,auto]
+ 		($(0,0)+(0,\dotYSep)$) edge []
+		 node[xshift=0.4ex,black] {$\Gamma$} (0,0)  ;%
+
+	\path [->,>=stealth,shorten >=1pt,shorten <=1pt,ultra thick,blue!80,auto]
+ 		(0,0) edge []
+ 		node[xshift=0.4ex,black] {$\Gamma$} ($(0,-\dotYSep)$)  ;
+
+%	\end{scope}
+	%
+
+	%
+\end{tikzpicture}
+
+
+\end{document}
+

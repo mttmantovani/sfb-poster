@@ -1,0 +1,204 @@
+% !TeX program = xelatex
+\documentclass[tikz]{standalone}
+\usepackage{mathspec}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\setmainfont{Arial}
+\setmathsfont(Digits,Latin,Greek,Special){Arial}
+\usepackage[italic]{mathastext}
+
+% Laengenberechnung
+\usepackage{calc}
+
+% Fuer If-Then-Else
+\usepackage{ifthen}
+
+% Fur Makros mit Key-Value-Pairs
+\usepackage{keycommand}
+
+\newlength{\blskip}%
+
+\newkeycommand{\selectfontsize}[baselineskip=0, baselinefaktor=12/10][1]{%
+\ifthenelse{\equal{\commandkey{baselineskip}}{0}}{%
+\setlength{\blskip}{#1 * \commandkey{baselinefaktor}}%
+\fontsize{#1}{\blskip}\selectfont}%
+{\setlength{\blskip}{\commandkey{baselineskip}}%
+\fontsize{#1}{\blskip}\selectfont}}%
+
+
+
+\xdefinecolor{pink}{rgb}{0.98, 0.38, 0.5}
+\colorlet{bluedown}{blue!50}
+\colorlet{blueup}{blue!60!black!30}
+
+
+
+\begin{document}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{tikzpicture}[scale=10, inner sep=0pt]
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{shapes.geometric,calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes,snakes}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{positioning}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tikzset{
+	lead/.style={color=black,fill=black!10},
+	dot/.style={color=black},
+	occdot/.style={draw,shape=circle,size=1,fill=orange}
+	emptydot/.style={draw=orange,shape=circle,minimum size=0.1,dashed}
+	capacity/.style={color=black},
+	arrow/.style={<->,>=stealth},
+	arrowLeft/.style={<->,>=stealth},
+	spinArrow/.style={-{Latex[length=3pt,width=4pt]},shorten <=1.5pt,shorten
+	>=1.5pt,very thick},
+	nodecircle/.style={draw, shape=circle,inner sep=1.2pt},
+	oscbasisA/.style={fill=red!20, inner sep=0pt,draw=black},
+	oscbasisB/.style={fill=red!20, inner sep=0pt,draw=black},
+	nodesquare/.style={draw, shape=rectangle,inner sep=0pt, fill=white},
+%	nodecontrol/.style={draw,red,inner sep=0pt},
+	nodecontrol/.style={},
+	letter/.style={label={south east:#1}},
+	transition/.style 2 args={rectangle,draw,fill=red!20,minimum
+	width=#1,minimum
+	height=#2}
+}
+
+
+
+\selectfontsize{24pt}
+
+\tikzstyle{every path}=[line width=3pt]
+
+% Define global parameters
+\def\totalwidth{3.375}
+\def\totalheight{3.5}
+\def\widthA{3.375}
+\def\widthB{1.6875}
+\def\widthC{1.6875}
+\def\widthD{1.6875}
+\def\heightA{0.85}
+\def\heightB{0.87}
+\def\heightC{1.13}
+\def\heightD{2}
+\def\sepx{0.1}
+\def\sepy{0.1}
+
+	% Local parameters
+	\def\dotWidth{0.5}
+	\def\dotXSep{0.6}
+	\def\dotYSep{0.5}
+	\def\dotSize{0.05}
+	% Local coordinates
+	\coordinate (dotLm) at
+	($(-\dotXSep*0.5-\dotWidth*0.5,0)$) ;
+	\coordinate (dotRm) at
+	($(\dotXSep*0.5+\dotWidth*0.5,0)$) ;
+	\coordinate (dotLu) at
+	($(-\dotXSep*0.5-\dotWidth*0.5,\dotYSep)$) ;
+	\coordinate (dotRu) at
+	($(\dotXSep*0.5+\dotWidth*0.5,\dotYSep)$) ;
+	\coordinate (dotLb) at
+	($(-\dotXSep*0.5-\dotWidth*0.5,-\dotYSep)$) ;
+	\coordinate (dotRb) at
+	($(\dotXSep*0.5+\dotWidth*0.5,-\dotYSep)$) ;
+	%
+	\coordinate (singU) at
+	($(-0.3*\dotWidth,\dotYSep/2)$) ;
+	\coordinate (singB) at
+	($(-0.3*\dotWidth,-\dotYSep/2)$) ;
+	%
+	%
+	\node[label={[xshift=3.4ex,yshift=0.3ex]north west:
+	$|+,n_\alpha-1 \rangle$}] at (dotLu) {};
+
+	\node[label={[xshift=-4ex,yshift=-0.3ex]south east: $|-,n_\alpha\rangle$}] at (dotRu) {};
+
+	\node[label={[xshift=3.4ex,yshift=0.3ex]north west: $|+,n_\alpha-2\rangle$}] at (dotLm) {};
+
+	\node[label={[xshift=-4ex,yshift=-0.3ex]south east:
+	$|-,n_\alpha-1\rangle$}] at (dotRm) {};
+
+	\node[label={[xshift=3.4ex,yshift=0.3ex]north west: $|+,n_\alpha-3\rangle$}] at (dotLb) {};
+
+	\node[label={[xshift=-4ex,yshift=-0.3ex]south east:
+	$|-,n_\alpha-2\rangle$}] at (dotRb) {};
+
+	\node[label={[xshift=8ex]east: $|\alpha\sigma,{\color{blue}{n_\alpha-1\rangle}}$}] at (singU) {};
+	\node[label={[xshift=8ex]east:
+	$|\alpha\sigma,{\color{blue}{n_\alpha-2\rangle}}$}] at (singB) {};
+
+	\draw[dot]  ($(dotLm) - (\dotWidth*0.5,0)$) -- ($(dotLm) +
+	(\dotWidth*0.5,0)$) node [right] (levelML) {};
+	\draw[dot]  ($(dotRm) - (\dotWidth*0.5,0)$) node [left] (levelMR) {} -- ($(dotRm) +
+	(\dotWidth*0.5,0)$) ;
+	\draw[dot] ($(dotLu) - (\dotWidth*0.5,0)$) -- ($(dotLu) +
+	(\dotWidth*0.5,0)$) node [right] (levelUL) {} ;
+	\draw[dot] ($(dotRu) - (\dotWidth*0.5,0)$) node [left] (levelUR) {} -- ($(dotRu) +
+	(\dotWidth*0.5,0)$);
+	\draw[dot] ($(dotLb) - (\dotWidth*0.5,0)$) -- ($(dotLb) +
+	(\dotWidth*0.5,0)$) node [right] (levelBL) {} ;
+	\draw[dot] ($(dotRb) - (\dotWidth*0.5,0)$) node [left] (levelBR) {} -- ($(dotRb) +
+	(\dotWidth*0.5,0)$) ;
+
+	\draw[dot] ($(singU)+(-\dotWidth/2,0)$) -- ($(singU)+(\dotWidth/2,0)$) ;
+	\draw[dot] ($(singB) +(-\dotWidth/2,0)$) -- ($(singB)+(\dotWidth/2,0)$) ;
+
+
+	%%% All the arrows
+	% Coherence TOP
+	\path[->,pink,dash pattern=on 4 off 2, >=stealth,auto]
+	([xshift=0.1ex]levelUL.east) edge [bend left=70,distance=0.1cm] node [midway,above,yshift=0.5ex] {$\sim\!\! \frac{\lambda_\alpha\Gamma_S}{\delta}$} ([xshift=-0.1ex]levelUR.west);
+	\path[<-,pink,dash pattern=on 4 off 2,>=stealth,auto]
+	([xshift=0.1ex]levelUL.east) edge [bend right=70,distance=0.1cm] ([xshift=-0.1ex]levelUR.west);
+	
+	% Coherence MID
+	\path[->,pink,dash pattern=on 4 off 2,>=stealth,auto]
+	([xshift=0.1ex]levelML.east) edge [bend left=70,distance=0.1cm] ([xshift=-0.1ex]levelMR.west) ;
+	\path[<-,pink,dash pattern=on 4 off 2,>=stealth,auto]
+	([xshift=0.1ex]levelML.east) edge [bend right=70,distance=0.1cm] ([xshift=-0.1ex]levelMR.west);
+
+	% Coherence BOTTOM
+	\path[->,thick,pink,dash pattern=on 4 off 2,>=stealth,auto]
+	([xshift=0.1ex]levelBL.east) edge [bend left=70,distance=0.1cm] ([xshift=-0.1ex]levelBR.west);
+	\path[<-,thick,pink,dash pattern=on 4 off 2,>=stealth,auto]
+	([xshift=0.1ex]levelBL.east) edge [bend right=70,distance=0.1cm] ([xshift=-0.1ex]levelBR.west);
+
+	% Transition top
+	\path [->,>=stealth,shorten >=1pt,shorten <=1pt,bluedown,auto]
+	($(dotLu)+(-0.04,0)$) edge ($(singU)+(-0.04,0)$)  ;%
+
+	\path [<-,>=stealth,shorten >=1pt,shorten <=1pt,densely dashed,blueup,auto]
+	($(dotLu)+(0.04,0)$) edge [] ($(singU)+(0.04,0)$)  ;%
+
+
+\path [->,>=stealth,shorten >=1pt,shorten <=1pt,bluedown,auto]
+	($(singU)+(0.2-0.04,0)$) edge [] ($(dotRm)+(-0.19-0.04,0)$)  ;
+
+\path [<-,>=stealth,shorten >=1pt,shorten <=1pt,densely dashed,blueup,auto]
+($(singU)+(0.2+0.04,0)$) edge [] ($(dotRm) +(-0.19+0.04,0)$);
+
+
+	% Transition bottom
+	\path [->,>=stealth,shorten >=1pt,shorten <=1pt,bluedown,auto]
+	($(dotLm)+(-0.04,0)$) edge ($(singB)+(-0.04,0)$)  ;%
+
+	\path [<-,>=stealth,shorten >=1pt,shorten <=1pt,densely dashed,blueup,auto]
+	($(dotLm)+(0.04,0)$) edge [] ($(singB)+(0.04,0)$)  ;%
+
+
+\path [->,>=stealth,shorten >=1pt,shorten <=1pt,bluedown,auto]
+	($(singB)+(0.2-0.04,0)$) edge [] ($(dotRb)+(-0.19-0.04,0)$)  ;
+
+\path [<-,>=stealth,shorten >=1pt,shorten <=1pt,densely dashed,blueup,auto]
+($(singB)+(0.2+.04,0)$) edge [] ($(dotRb) +(-0.19+0.04,0)$);
+
+\end{tikzpicture}
+
+
+\end{document}
+
