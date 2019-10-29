@@ -1,5 +1,5 @@
 NAME		:= main
-TEXRULE		:= latexmk -pdf -xelatex -use-make
+TEXRULE		:= latexmk -pdf -xelatex="xelatex -synctex=1 -interaction=batchmode" -use-make
 BIB			:= $(HOME)/library.bib
 DERIVED_BIB := references.bib
 
@@ -19,7 +19,7 @@ clean:
 #	bibexport -o $@ $<
 
 # With biber
-$(DERIVED_BIB): $(BIB)
+$(DERIVED_BIB): $(NAME).aux
 	biber --output-format=bibtex \
 		  --output-fieldcase=lower \
 		  --output-file $@ \
