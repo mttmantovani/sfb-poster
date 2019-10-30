@@ -345,12 +345,18 @@ bottom=1cm, top=1cm, headheight=0cm, headsep=0cm}%
 % Höhe besteht und zwei weiteren oberhalb und drei weiteren unterhalb als
 % Platzhalter bei Verwendung des Optimums.
 
-\newcommand{\unilogo}[1][graphics/UniKonstanz_Logo_Optimum.pdf]{%
-\begin{textblock*}{\paperwidth}(0pt, 0pt)%
-\hfill\includegraphics[height=\logoheight * 9/4]{#1}%
-\end{textblock*}%
-}%
+%\newcommand{\unilogo}[1][graphics/UniKonstanz_Logo_Optimum.pdf]{%
+%\begin{textblock*}{\paperwidth}(0pt, 0pt)%
+%\hfill\includegraphics[height=\logoheight * 9/4]{#1}%
+%\end{textblock*}%
+%}%
 
+\newcommand{\unilogo}[1][UniKonstanz_Logo.pdf]{%
+	\begin{textblock*}{\paperwidth}(0cm, 2cm)%
+		\rightskip 2cm
+		\hfill\includegraphics[scale=1.5]{#1}
+	\end{textblock*}%
+}%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1032,8 +1038,8 @@ bottom=1cm, top=1cm, headheight=0cm, headsep=0cm}%
 \draw[seeblau100, line width=\tempboxthick] (\colsevensoutheastx + 0.5\spacewidth,\headsouthwesty - \headlinesep) -- (\colsevensoutheastx + 0.5\spacewidth,\maximumdepth);}{}}}}%
 \fi%
 \ifthenelse{\equal{\commandkey{block}}{\argtrue}}{%
-\draw[seeblau100, line width=\tempboxthick] (0.5\blockwidth,0) -- (\blockwidth 
-,0) -- (\blockwidth,\maximumdepth-\outersep) --  (0,\maximumdepth-\outersep) 
+\draw[seeblau100, line width=\tempboxthick] (0.5\blockwidth,0) -- (\blockwidth-\tempboxthick 
+,0) -- (\blockwidth-\tempboxthick,\maximumdepth-\outersep) --  (0,\maximumdepth-\outersep) 
 -- (0,0) -- (0.5\blockwidth,0);%
 }{\ifthenelse{\equal{\commandkey{outerleft}}{\argshort}}{%
 \draw[seeblau100, line width=\tempboxthick] (0.5\spacewidth,\headsouthwesty - \headlinesep) -- (0.5\spacewidth,\colonesoutheasty);%
@@ -1187,9 +1193,18 @@ bottom=1cm, top=1cm, headheight=0cm, headsep=0cm}%
 %
 % EINE KOMMENTIERUNG DER FOLGENDEN ZEILEN FOLGT AUS ZEITLICHEN GRÜNDEN
 % ERST IN DER NÄCHSTEN VERSION
+\newcommand{\pline}{\textcolor{seeblau100}{\rule{\textwidth}{12pt}}}
+
+%\newkeycommand{\pline}[color=seeblau100, thick=\boxlinewidth][1]{
+%	\begin{tikzpicture}[outer sep=0, inner sep=0]%
+%		\tikzstyle{linestyle}=[color=\commandkey{color}, line width=\commandkey{thick}]%
+%		\draw[linestyle] (0,0) -- (#1,0);%
+%	\end{tikzpicture}
+%}
+
 
 \newkeycommand{\cdline}[color=seeblau100, thick=\boxlinewidth, mode=horizontal, arrowleft=false, arrowright=false][1]{%
-\begin{tikzpicture}[outer sep=0]%
+\begin{tikzpicture}[outer sep=0, inner sep=0]%
 \tikzstyle{linestyle}=[color=\commandkey{color}, line width=\commandkey{thick}]%
 \ifthenelse{\equal{\commandkey{arrowleft}}{true}}{%
 \ifthenelse{\equal{\commandkey{arrowright}}{true}}{%

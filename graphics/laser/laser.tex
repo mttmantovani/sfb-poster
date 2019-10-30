@@ -1,0 +1,45 @@
+\documentclass[tikz]{standalone}
+\begin{document}
+	\usetikzlibrary{decorations.pathmorphing}
+	\usetikzlibrary{shapes.geometric,calc}
+	\usetikzlibrary{arrows.meta}
+	\usetikzlibrary{shapes,snakes}
+	\usetikzlibrary{decorations.markings}
+	
+	\begin{tikzpicture}
+		\def\dotWidth{50mm}
+		\def\electronSize{20mm}
+		\def\spinLength{50mm}
+		\tikzstyle{dot}[black] = [draw, align=center, minimum width=\dotWidth, 
+								  ultra thick, fill=#1, color=#1]
+		\tikzstyle{electron}[red] = [shade, shading=ball, ball color=#1, 
+									 circle, minimum size=\electronSize]
+		\tikzstyle{hole}[red] = [color=#1]
+		\tikzstyle{spinUpArrow} = [fill=red, single arrow,
+		              			   minimum height=\spinLength, minimum 
+		              			   width=20mm,
+		              			   single arrow head extend=2mm,
+		              			   align=center, rotate=90]
+		\tikzstyle{spinDownArrow} = [fill=blue, single arrow,
+							         minimum height=\spinLength, minimum 
+							         width=20mm,
+							         single arrow head extend=2mm,
+							         align=center, rotate=270]
+		\tikzstyle{control} = [align=center,draw, thick, blue, inner sep=1ex]
+		
+
+		\node[control] at (0,0) (up) {};
+		\node[control] at (5, -5) (down) {};
+		
+		\node[dot] at (up) {};
+		\node[dot] at (down) {};
+		
+		
+		\node[spinUpArrow] at (up) {};
+		\node[spinDownArrow] at (down) {};
+
+		\node[electron=red] at (up) {};
+		\node[electron=blue] at (down) {};		
+	
+	\end{tikzpicture}
+\end{document}
