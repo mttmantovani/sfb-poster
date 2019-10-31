@@ -1,0 +1,65 @@
+\tikzstyle{dot}[black] = [draw, align=center, minimum 
+width=\dotWidth, 
+          ultra thick, fill=#1, color=#1]
+\tikzstyle{electron}[red] = [shading=ball, ball color=#1, 
+                     circle, minimum size=\electronSize]
+\tikzstyle{hole}[red] = [electron=#1, ultra thick, dashed, draw=#1, fill
+opacity=0.5  ]
+\tikzstyle{spinUpArrow} = [fill=red, single arrow,
+                   minimum height=\spinLength, minimum 
+                   width=2/5*\spinLength,
+                   single arrow head extend=2/50*\spinLength,
+                   align=center, rotate=90]
+\tikzstyle{spinDownArrow} = [fill=blue, single arrow,
+     minimum height=\spinLength, minimum 
+     width=20mm,
+     single arrow head extend=2mm,
+     align=center, rotate=270]
+\tikzstyle{control} = [align=center,draw, thick, blue, inner 
+sep=1ex]
+
+
+
+\tikzset{
+	spin up/.style ={fill=#1, minimum height=50, minimum width=20, single 
+	arrow, 
+					 single arrow head extend=2,
+				     align=center, rotate=90},
+	spin down/.style={fill=#1, minimum height=50, minimum width=20, 
+	single arrow, 
+	                  single arrow head extend=2,
+				      align=center, rotate=270},
+	lead barrier/.style={thin, draw=black, fill=black!20, minimum 
+						 height=\leadHeight, minimum width=\leadWidth},
+	lead/.style={thin,color=black,fill=black!10}
+}
+
+%\newcommand{\fermi}{
+%	\begin{tikzpicture}[xscale=1.0,yscale=1.0]
+%		\draw[domain=-1.0:1.0,smooth,variable=\x, lead] plot 
+%		({1-1/(exp(\x*7.2+2.5)+1)},\x) 
+%		{ -- ++(0,-2)}
+%		;
+%	\end{tikzpicture}%
+%}
+%\newcommand\gauss[2]{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}
+\newcommand\fermidirac[2]{1/(exp((#1*x-#2))+1)}
+\newcommand{\fermi}{
+		\begin{axis}[every axis plot post/.append style={
+		 domain=-3:1,samples=50,smooth}, 
+		   hide axis,
+		   no markers,
+		   clip bounding box=upper bound,
+%		   axis line style={draw=none}, tick style={draw=none},
+%		xticklabels={,,},
+%		yticklabels={,,},		
+		axis x line*=bottom, % no box around the plot, only x and y axis
+		axis y line*=left % the * suppresses the arrow tips
+	] % extend the axes a bit to the right and top
+		\addplot[thick, color=black, fill=black!10] {\fermidirac{10}{1}} 
+		\closedcycle;
+		\end{axis}
+	%	\draw[domain=-1.0:1.0,smooth,variable=\x, lead] plot 
+%		({1-1/(exp(\x*7.2+2.5)+1)},\x) 
+}
+
