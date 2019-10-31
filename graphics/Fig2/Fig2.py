@@ -10,7 +10,7 @@ optionProcessing = False
 for opt in sys.argv[1:]:
     if opt.strip() == 'processing=True':
         optionProcessing = True
-        print '[processing mode]'
+        print ('[processing mode]')
 """
 Plot functions:
 ----
@@ -28,7 +28,7 @@ datapathDict = {
     2: 'data/GammaS_dependence_at_finite_kBT_setA.dat',
     3: 'data/GammaS_dependence_at_finite_kBT_setB.dat',
 }
-for k, v in datapathDict.iteritems():
+for k, v in datapathDict.items():
     labelLst = list()
     dataset = loadtxt(v)
     for nidx, line in enumerate(open(v, 'r')):
@@ -205,7 +205,7 @@ def plotMultiData(prefix):
     axins.tick_params(pad=11)
     axins.set_ylabel('nLNorm', labelpad=40)
 
-    for kdx, v in sub.iteritems():
+    for kdx, v in sub.items():
         if kdx in [0]:
             setIdx = 0
             p = paramDict[setIdx]
@@ -225,7 +225,7 @@ def plotMultiData(prefix):
             v.set_yticklabels(YTickLblLst)
             v.tick_params(pad=11)
 
-    for kdx, v in sub.iteritems():
+    for kdx, v in sub.items():
         if kdx in [1]:
             setIdx = 0
             p = paramDict[setIdx]
@@ -251,6 +251,9 @@ def plotMultiData(prefix):
         left=0.13, bottom=0.13, right=0.995, top=0.99, wspace=0.4, hspace=0.10)
     if optionProcessing:
         savefig(ExportName, facecolor='none', edgecolor='none', dpi=400)
+
+        import tikzplotlib
+        tikzplotlib.save("Fig2test.tex")
     else:
         show()
 

@@ -1,45 +1,62 @@
 \documentclass[tikz]{standalone}
+\usepackage{pgfplots}
 \begin{document}
 	\usetikzlibrary{decorations.pathmorphing}
-	\usetikzlibrary{shapes.geometric,calc}
+	\usetikzlibrary{shapes.geometric,calc,positioning}
 	\usetikzlibrary{arrows.meta}
 	\usetikzlibrary{shapes,snakes}
 	\usetikzlibrary{decorations.markings}
 	
-	\begin{tikzpicture}
-		\def\dotWidth{50mm}
-		\def\electronSize{20mm}
-		\def\spinLength{50mm}
-		\tikzstyle{dot}[black] = [draw, align=center, minimum width=\dotWidth, 
-								  ultra thick, fill=#1, color=#1]
-		\tikzstyle{electron}[red] = [shade, shading=ball, ball color=#1, 
-									 circle, minimum size=\electronSize]
-		\tikzstyle{hole}[red] = [color=#1]
-		\tikzstyle{spinUpArrow} = [fill=red, single arrow,
-		              			   minimum height=\spinLength, minimum 
-		              			   width=20mm,
-		              			   single arrow head extend=2mm,
-		              			   align=center, rotate=90]
-		\tikzstyle{spinDownArrow} = [fill=blue, single arrow,
-							         minimum height=\spinLength, minimum 
-							         width=20mm,
-							         single arrow head extend=2mm,
-							         align=center, rotate=270]
-		\tikzstyle{control} = [align=center,draw, thick, blue, inner sep=1ex]
-		
+	
 
-		\node[control] at (0,0) (up) {};
-		\node[control] at (5, -5) (down) {};
+
+	
+	\begin{tikzpicture}
+	
+	\draw[step=1,gray,very thin] (-10,-10) grid (10,10);
+		\def\dotWidth{50}
+		\def\electronSize{20}
+		\def\spinLength{50}
+		\def\leadHeight{100}
+		\def\leadWidth{5}
+		\def\fermiWidth{50}
 		
+		\input{laser.tikz}
+		
+		\node[control] at (-2,2) (up) {};
+		\node[control] at (2, -2) (down) {};
+		\node[control] at (-6, 0) (leadL) {};	
+		\node[control] at (6, 0) (leadR) {};
+		\node[control] at (-8, 2) (holeL) {};
+		\node[control] at (8, -2) (holeR) {};
+		\node[control] at (-8,4) (fermiL) {};
+		\node[control] at (8,-4) (fermiR) {};			
+				
 		\node[dot] at (up) {};
 		\node[dot] at (down) {};
+	
+		\node[lead barrier] (leadL) at (leadL) {};
+		\node[lead barrier] at (leadR) {};	
+				
+		\node[inner sep=0, anchor=south east, rotate=90] (fermiL) at 
+		(leadL.north west) 
+		{
+			\begin{tikzpicture}[inner sep=0]
+			\fermi
+			\end{tikzpicture}
+			};
 		
-		
-		\node[spinUpArrow] at (up) {};
-		\node[spinDownArrow] at (down) {};
+		\node[spin up=red] at (up) {};
+		\node[spin down=blue] at (down) {};
 
 		\node[electron=red] at (up) {};
-		\node[electron=blue] at (down) {};		
+		\node[electron=blue] at (down) {};	
+			
 	
+		\node[hole=red] at (holeL) {};
+		\node[hole=blue] at (holeR) {};
+		
+
+		
 	\end{tikzpicture}
 \end{document}
