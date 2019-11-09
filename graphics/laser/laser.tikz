@@ -1,5 +1,4 @@
-\tikzstyle{dot}[black] = [draw, align=center, minimum 
-width=\dotWidth, 
+\tikzstyle{dot}[black] = [draw, align=center,
           ultra thick, fill=#1, color=#1]
 \tikzstyle{electron}[red] = [shading=ball, ball color=#1, 
                      circle, minimum size=\electronSize]
@@ -16,7 +15,7 @@ opacity=0.5  ]
      single arrow head extend=2mm,
      align=center, rotate=270]
 \tikzstyle{control} = [align=center,draw, thick, blue, inner 
-sep=1ex]
+sep=0]
 
 
 

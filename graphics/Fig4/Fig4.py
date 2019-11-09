@@ -28,7 +28,7 @@ matplotlib.rc('axes', linewidth=1.5)
 def default_kwargs():
     kwargs = {
         'interpolation': 'nearest',
-        'figsize': (15./2.54, 16./2.54),
+        'figsize': (15./2.54, 14./2.54),
         'fontsize': 7,
         'titlefontsize': 11,
         'lw': 3.,
@@ -83,10 +83,14 @@ def plot_data(**kwargs):
             raise Exception("Invalid keyword argument '" + k + "'.")
 
     # Define figure layout
-    fig, axes = plt.subplots(2, 1, figsize=plt_args['figsize'])
+    fig = plt.figure(figsize=plt_args['figsize'])
+    gs = gridspec.GridSpec(2, 1, height_ratios=[0.8,1])
+    ax1 = fig.add_subplot(gs[0])
+    ax2 = fig.add_subplot(gs[1])
+  #  fig, axes = plt.subplots(2, 1, figsize=plt_args['figsize'])
 
-    ax1 = axes[0]
-    ax2 = axes[1]
+  #  ax1 = axes[0]
+  #  ax2 = axes[1]
  #   gs = gridspec.GridSpec(2, 2, width_ratios=[0.25, 1])
  #   ax1 = fig.add_subplot(gs[0, :])  # Current
  #   ax2 = fig.add_subplot(gs[1, 0])  # Local efficiency
@@ -271,7 +275,7 @@ def plot_data(**kwargs):
         columnspacing=0.7,
         handlelength=6)
 
-    for ax in axes:
+    for ax in (ax1,ax2):
         ax.tick_params(
             labelsize=plt_args['fontsize'], pad=plt_args['labelpad'])
 

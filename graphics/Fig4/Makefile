@@ -23,8 +23,7 @@ $(FIGNAME).pdf: $(FIGNAME).eps $(FIGNAME).tex
 
 $(FIGNAME).eps: $(FIGNAME).py
 	@python $< --processing $(REDIR) 
-	@chmod +x $(PROJDIR)/bin/unglyph
-	@$(PROJDIR)/bin/unglyph $(FIGNAME).eps $(FIGNAME).eps $(REDIR)
+	@python unglyph.py $(FIGNAME).eps $(FIGNAME).eps $(REDIR)
 
 clean:
 	@rm -f $(addprefix $(FIGNAME),$(TOCLEAN)) $(REDIR)

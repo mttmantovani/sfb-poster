@@ -114,7 +114,9 @@ nodecontrol/.style={}
 	};
 	\node[inner sep=0, anchor=south west] (leadB) at (gridNode14){%
 		\begin{tikzpicture}[xscale=\leadWidth,yscale=1.0]
-			\draw[domain=-1.0:1.0,smooth,variable=\x, lead] plot ({1/(exp(\x*7.2+2.5)+1)},\x) -- ++(0,\leadHeight-2) -- ++(0,-\leadHeight);
+			\draw[domain=-1.0:1.0,samples=50,smooth,variable=\x, lead] plot 
+			({1/(exp(\x*7.2+2.5)+1)},\x) -- ++(0,\leadHeight-2) -- 
+			++(0,-\leadHeight);
 		\end{tikzpicture}%
 	};
 	\node[nodecontrol,yshift=\dotHeightB cm] (leadRateB) at (leadB.south west){};

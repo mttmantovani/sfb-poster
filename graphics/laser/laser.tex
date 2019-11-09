@@ -6,23 +6,110 @@
 	\usetikzlibrary{arrows.meta}
 	\usetikzlibrary{shapes,snakes}
 	\usetikzlibrary{decorations.markings}
+		
+	\fontsize{24}{28.8}\selectfont
+
+
+
+	\def\dotWidth{5cm}
+	\def\dotThickness{1mm}
+	\def\electronSize{2cm}
+	\def\spinLength{5cm}
+	\def\leadHeight{15cm}
+	\def\leadWidth{1mm}
+	\def\fermiWidth{4cm}
+	
+	\tikzstyle{control} = [align=center,draw, thick, blue, inner 
+	sep=1ex]
+	
+	\tikzstyle{dot}[black] = [draw, align=center,
+	ultra thick, fill=#1, color=#1, minimum width=\dotWidth, minimum 
+	height=\dotThickness]
+	%		\input{laser.tikz}
+	
+	\tikzstyle{hole}[red] = [electron=#1, ultra thick, dashed, draw=#1, fill
+	opacity=0.5  ]
+	\tikzset{
+		spin up/.style ={fill=#1, minimum height=5cm, minimum width=2cm, 
+			single 
+			arrow, 
+			single arrow head extend=2mm,
+			align=center, rotate=90},
+		spin down/.style={fill=#1, minimum height=5cm, minimum width=2cm, 
+			single arrow, 
+			single arrow head extend=2mm,
+			align=center, rotate=270},
+		lead barrier/.style={thin, draw=black, fill=black!20, minimum 
+			height=\leadHeight, minimum width=\leadWidth},
+		lead/.style={thin,color=black,fill=black!10}
+	}
+	
+	\tikzstyle{electron}[red] = [shading=ball, ball color=#1, 
+	circle, minimum size=\electronSize]
 	
 	
+	\newcommand\fermidirac[2]{1/(exp(#1*(x-#2))+1)}
+	\newcommand\fermidiracalt[2]{1/(exp(#1*(-x-#2))+1)}
+	\newcommand{\fermiL}{
+		\begin{axis}[every axis plot post/.append style={
+			domain=-1:1,samples=50,smooth}, 
+			hide axis,
+			no markers,
+		%	xticklabels={,,},
+			clip bounding box=upper bound,	
+			axis x line*=bottom, % no box around the plot, only x and y axis
+			axis y line*=left,
+			scale only axis,
+			width=\leadHeight+3cm,
+			height=\fermiWidth % the * suppresses the arrow tips
+			] 
+			\addplot[shade, left color=white, right 
+			color=red] 
+			{\fermidirac{20}{0.6}} 
+			\closedcycle;
+		\end{axis}
+%			\draw[domain=-1:1.0,smooth,variable=\x, lead] plot 
+%				(\x, {1/(exp((\x-0.6)*20)+1)}) --++ (-2,0) -- cycle ;
+	}
+
+	\newcommand{\fermiR}{
+	\begin{axis}[every axis plot post/.append style={
+			domain=-1:1,samples=50,smooth}, 
+		hide axis,
+		no markers,
+		%	xticklabels={,,},
+		clip bounding box=upper bound,	
+		axis x line*=bottom, % no box around the plot, only x and y axis
+		axis y line*=left,
+		scale only axis,
+		width=6cm,
+		height=\fermiWidth % the * suppresses the arrow tips
+		] 
+		\addplot[shade, left color=blue, right 
+		color=white] 
+		{\fermidiracalt{20}{0.6}} 
+		\closedcycle;
+	\end{axis}
+	%			\draw[domain=-1:1.0,smooth,variable=\x, lead] plot 
+	%				(\x, {1/(exp((\x-0.6)*20)+1)}) --++ (-2,0) -- cycle ;
+}
 
 
 	
-	\begin{tikzpicture}
+	\begin{tikzpicture}[scale=1]
 	
-	\draw[step=1,gray,very thin] (-10,-10) grid (10,10);
-		\def\dotWidth{50}
-		\def\electronSize{20}
-		\def\spinLength{50}
-		\def\leadHeight{100}
-		\def\leadWidth{5}
-		\def\fermiWidth{50}
+		% ==========================	
+		% Control grid
+		% ==========================		
+		\draw[step=1,gray,very thin] (-14,-14) grid (14,14);
+	
+	
+
 		
-		\input{laser.tikz}
-		
+		% ==========================	
+		% Control points definitions
+		% ==========================
+		\node[control] at (0,0) (origin) {};
 		\node[control] at (-2,2) (up) {};
 		\node[control] at (2, -2) (down) {};
 		\node[control] at (-6, 0) (leadL) {};	
@@ -30,33 +117,93 @@
 		\node[control] at (-8, 2) (holeL) {};
 		\node[control] at (8, -2) (holeR) {};
 		\node[control] at (-8,4) (fermiL) {};
-		\node[control] at (8,-4) (fermiR) {};			
+		\node[control] at (8,-4) (fermiR) {};		
+		
+		
+
+
+		% ============
+		% Dots' levels
+		% ============			
+%		\draw[black, ultra thick] ($(up) - (0.5*\dotWidth, 0)$) -- ($(up) + 
+%		(0.5*\dotWidth, 0)$); 	
+%		\draw[black, ultra thick] ($(down) - (0.5*\dotWidth, 0)$) -- ($(down) 
+%		+ 
+%		(0.5*\dotWidth, 0)$); 
+		\node[dot, yscale=0.5] at (up) {};
+		\node[dot, yscale=0.5] at (down) {};
+
+
+		% ============
+		% Spin arrows
+		% ============		
+		\node[spin up=red] at (up) {};
+		\node[spin down=blue] at (down) {};	
+
+		
+		% ============
+		% Electrons
+		% ============	
+%		\shade[shading=ball, ball color=red] (up) circle (1cm);		
+%		\shade[shading=ball, ball color=blue] (down) circle (1cm);	
+		\node[electron=red] at (up) {};
+		\node[electron=blue] at (down) {};
+		
+		
 				
-		\node[dot] at (up) {};
-		\node[dot] at (down) {};
+
+%		\node[anchor=west, draw=black, circle, minimum height=100, fill=white, 
+%		fill opacity=0.2] 
+%		at (origin) 
+%		{};	
+				
+%		\node[dot] at (up) {};
+%		\node[dot] at (down) {};
 	
 		\node[lead barrier] (leadL) at (leadL) {};
-		\node[lead barrier] at (leadR) {};	
+		\node[lead barrier] (leadR) at (leadR) {};	
+		
+	%	\draw[fill=black!10, draw=black] (leadL) rectangle ++(2,2);
 				
-		\node[inner sep=0, anchor=south east, rotate=90] (fermiL) at 
-		(leadL.north west) 
+		\node[inner sep=0, rotate=90, anchor=south west] 
+		(fermiL) 
+		at 
+		(leadL.south west) 
 		{
+		%	\resizebox{15cm}{4cm}{
 			\begin{tikzpicture}[inner sep=0]
-			\fermi
+			\fermiL
 			\end{tikzpicture}
 			};
-		
-		\node[spin up=red] at (up) {};
-		\node[spin down=blue] at (down) {};
 
-		\node[electron=red] at (up) {};
-		\node[electron=blue] at (down) {};	
+		\node[inner sep=0, rotate=270, anchor=south east] 
+			(fermiR) 
+			at 
+			(leadR.south east) 
+			{
+				%	\resizebox{15cm}{4cm}{
+				\begin{tikzpicture}[inner sep=0]
+				\fermiR
+				\end{tikzpicture}
+};		
+
+
+%		\node[electron=red] at (up) {};
+%		\node[electron=blue] at (down) {};	
 			
 	
 		\node[hole=red] at (holeL) {};
 		\node[hole=blue] at (holeR) {};
 		
 
+		\node[spin up=black!20, minimum height=3cm, xshift=2ex, anchor=west] 
+		at 
+		(fermiL.west) {};
+		\node[spin down=black!20, minimum height=3cm, xshift=-2ex, anchor=east] 
+		at 
+		(fermiR.east) {};
+		
+		\node[control] at (fermiL.center) {};
 		
 	\end{tikzpicture}
 \end{document}
